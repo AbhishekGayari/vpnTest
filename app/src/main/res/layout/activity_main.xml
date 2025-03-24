@@ -10,5 +10,5 @@
         android:id="@+id/startVpnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start VPN" />
+        android:text="App Started" />
 </LinearLayout>
