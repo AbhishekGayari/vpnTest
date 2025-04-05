@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -14,13 +15,15 @@ import android.net.VpnService
 import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityManager
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 
 class MainActivity : AppCompatActivity() {
-    private val VPN_REQUEST_CODE = 100
-
+lateinit var startVpnButton: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -30,6 +33,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        startVpnButton = findViewById(R.id.startVpnButton)
+
         checkPermissions()
 
     }
@@ -54,12 +59,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun startApp() {
-        saveBlockedWebsites(this, listOf("whatsapp.com","facebook.com", "youtube.com"))
+        val blockedSites = listOf("whatsapp.com", "facebook.com", "youtube.com")
+
+        saveBlockedWebsites(this, blockedSites)
+        val listView = findViewById<ListView>(R.id.blockedSitesListView)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, blockedSites)
+        listView.adapter = adapter
     }
 
     fun saveBlockedWebsites(context: Context, websites: List<String>) {
+        startVpnButton.text = getString(R.string.domains_are_restricted)
         val sharedPreferences = context.getSharedPreferences("BlockedWebsites", Context.MODE_PRIVATE)
         sharedPreferences.edit().putStringSet("blocked_domains", websites.toSet()).apply()
+        showExitKioskAlert()
+    }
+
+    private fun showExitKioskAlert() {
+        AlertDialog.Builder(this)
+            .setTitle("Exit Kiosk Mode")
+            .setMessage("To exit kiosk mode:\n\n1. Long press the power button\n2. Tap 'Exit Kiosk Mode' if shown\n3. Require admin PIN to exit.")
+            .setPositiveButton("OK", null)
+            .show()
+
     }
 
     private fun launchPermissionRequest() {

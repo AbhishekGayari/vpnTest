@@ -6,9 +6,21 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <Button
+    <TextView
         android:id="@+id/startVpnButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="App Started" />
+        android:layout_margin="15dp"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        />
+
+    <ListView
+        android:id="@+id/blockedSitesListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        />
+
 </LinearLayout>
