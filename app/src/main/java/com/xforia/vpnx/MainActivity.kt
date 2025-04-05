@@ -51,18 +51,19 @@ class MainActivity : AppCompatActivity() {
             !isAccessibilityServiceEnabled() -> launchPermissionRequest()
             else -> startApp()
         }
-
     }
 
     private fun startApp() {
-        saveBlockedWebsites(this, listOf("example.com", "facebook.com", "youtube.com"))
+        saveBlockedWebsites(this, listOf("whatsapp.com","facebook.com", "youtube.com"))
     }
+
     fun saveBlockedWebsites(context: Context, websites: List<String>) {
         val sharedPreferences = context.getSharedPreferences("BlockedWebsites", Context.MODE_PRIVATE)
         sharedPreferences.edit().putStringSet("blocked_domains", websites.toSet()).apply()
     }
 
     private fun launchPermissionRequest() {
+        Toast.makeText(this, "Enable Accessibility for ${getString(R.string.app_name)}", Toast.LENGTH_LONG).show()
         val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
         permissionLauncher.launch(intent)
     }
